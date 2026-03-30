@@ -833,8 +833,14 @@ const BASE_DATA = [
 
 // ── 로컬 추가분 병합 ──
 function getAllData() {
-  const local = JSON.parse(localStorage.getItem('nc_added') || '[]');
-  return [...local, ...BASE_DATA];
+  try {
+    const raw = localStorage.getItem('nc_added');
+    const local = raw ? JSON.parse(raw) : [];
+    return Array.isArray(local) ? [...local, ...BASE_DATA] : [...BASE_DATA];
+  } catch(e) {
+    console.warn('localStorage 읽기 실패, 기본 데이터만 사용:', e);
+    return [...BASE_DATA];
+  }
 }
 
 // ── 상태 ──
@@ -1039,9 +1045,11 @@ document.getElementById('addBtn').addEventListener('click', () => {
     thumb:    document.getElementById('aThumb').value.trim(),
   };
   if (!item.vol || !item.title) { alert('Vol. 번호와 제목은 필수예요.'); return; }
-  const local = JSON.parse(localStorage.getItem('nc_added') || '[]');
+  let local = [];
+  try { local = JSON.parse(localStorage.getItem('nc_added') || '[]'); } catch(e) { local = []; }
+  if (!Array.isArray(local)) local = [];
   local.unshift(item);
-  localStorage.setItem('nc_added', JSON.stringify(local));
+  try { localStorage.setItem('nc_added', JSON.stringify(local)); } catch(e) {}
   ['aVol','aTitle','aKw','aDate','aUrl','aThumb'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('adminPanel').classList.remove('open');
   render();
@@ -1049,6 +1057,16 @@ document.getElementById('addBtn').addEventListener('click', () => {
 });
 
 // ── 초기화 ──
+// localStorage 데이터 유효성 검사
+try {
+  const raw = localStorage.getItem('nc_added');
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) localStorage.removeItem('nc_added');
+  }
+} catch(e) {
+  localStorage.removeItem('nc_added');
+}
 buildFilters();
 render();
 </script>
