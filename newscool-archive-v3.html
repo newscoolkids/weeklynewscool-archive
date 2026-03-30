@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이번 주 뉴스쿨 아카이브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1C1917;
+  --ink2: #44403C;
+  --muted: #78716C;
+  --faint: #A8A29E;
+  --border: #E7E5E4;
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --red: #DC2626;
+  --red-light: #FEF2F2;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --green: #16A34A;
+  --green-light: #F0FDF4;
+  --blue: #2563EB;
+  --blue-light: #EFF6FF;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --teal: #0D9488;
+  --teal-light: #F0FDFA;
+  --font-sans: 'Noto Sans KR', sans-serif;
+  --font-serif: 'Noto Serif KR', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--ink);
+  color: white;
+  padding: 0 20px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-logo {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: white;
+  text-decoration: none;
+}
+.topbar-sep { color: rgba(255,255,255,0.3); }
+.topbar-label { color: rgba(255,255,255,0.6); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+.topbar-right { color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 400; }
+
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.search-box {
+  flex: 1;
+  max-width: 340px;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  height: 34px;
+  padding: 0 12px 0 34px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-box input::placeholder { color: var(--faint); }
+.search-box input:focus { border-color: var(--ink); background: white; }
+.search-icon {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 15px; height: 15px;
+  color: var(--faint);
+  pointer-events: none;
+}
+.result-count {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
+.result-count b { color: var(--ink); }
+
+/* ── FILTER STRIP ── */
+.filter-strip {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.filter-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-inner::-webkit-scrollbar { display: none; }
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.filter-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+.chip {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 13px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chip:hover { border-color: var(--ink2); color: var(--ink2); }
+.chip.active { background: var(--ink); border-color: var(--ink); color: white; }
+.chip.cat-active-과학 { background: var(--blue); border-color: var(--blue); color: white; }
+.chip.cat-active-사회 { background: var(--red); border-color: var(--red); color: white; }
+.chip.cat-active-경제 { background: var(--yellow); border-color: var(--yellow); color: white; }
+.chip.cat-active-환경 { background: var(--green); border-color: var(--green); color: white; }
+.chip.cat-active-세계 { background: var(--teal); border-color: var(--teal); color: white; }
+.chip.cat-active-역사 { background: #92400E; border-color: #92400E; color: white; }
+.chip.cat-active-문화 { background: var(--purple); border-color: var(--purple); color: white; }
+.chip.cat-active-정치 { background: #4B5563; border-color: #4B5563; color: white; }
+.chip.cat-active-건강 { background: #BE185D; border-color: #BE185D; color: white; }
+.chip-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  color: white;
+  padding: 32px 20px 28px;
+}
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.hero-text {}
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: white;
+}
+.hero-title em {
+  font-style: normal;
+  color: #FCD34D;
+}
+.hero-sub {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+}
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.stat { text-align: right; }
+.stat-n {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+.stat-l {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+}
+
+/* ── LAYOUT ── */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ── YEAR DIVIDER ── */
+.year-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 28px 0 14px;
+}
+.year-num {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.year-line { flex: 1; height: 1px; background: var(--border); }
+.year-count {
+  font-size: 11px;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+
+/* ── GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  animation: fadeUp 0.25s ease both;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+  border-color: #D4D0CC;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* thumb */
+.card-thumb {
+  aspect-ratio: 16/9;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.card-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.card:hover .card-thumb img { transform: scale(1.04); }
+.thumb-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.thumb-placeholder .cat-icon { font-size: 22px; opacity: 0.4; }
+
+/* vol badge */
+.vol-badge {
+  position: absolute;
+  top: 8px; left: 8px;
+  background: rgba(255,255,255,0.93);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink2);
+  letter-spacing: 0.03em;
+}
+
+/* body */
+.card-body {
+  padding: 12px 14px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cat-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.card-date {
+  font-size: 10px;
+  color: var(--faint);
+  margin-left: auto;
+}
+.card-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+  flex: 1;
+  word-break: keep-all;
+}
+.card-keyword {
+  font-size: 10px;
+  color: var(--faint);
+  margin-top: 2px;
+}
+.card-keyword mark {
+  background: #FEF08A;
+  border-radius: 2px;
+  padding: 0 1px;
+  color: var(--ink2);
+}
+
+/* ── CATEGORY COLORS ── */
+.cat-과학   { background: var(--blue-light);   color: var(--blue); }
+.cat-사회   { background: var(--red-light);    color: var(--red); }
+.cat-경제   { background: var(--yellow-light); color: #92400E; }
+.cat-환경   { background: var(--green-light);  color: var(--green); }
+.cat-세계   { background: var(--teal-light);   color: var(--teal); }
+.cat-역사   { background: #FEF3C7; color: #92400E; }
+.cat-문화   { background: var(--purple-light); color: var(--purple); }
+.cat-정치   { background: #F3F4F6; color: #374151; }
+.cat-건강   { background: #FDF2F8; color: #BE185D; }
+.cat-WHO    { background: #F0FDF4; color: #166534; }
+.cat-기타   { background: #F5F5F4; color: var(--muted); }
+
+/* thumb placeholder bg */
+.bg-과학   { background: #DBEAFE; }
+.bg-사회   { background: #FEE2E2; }
+.bg-경제   { background: #FEF3C7; }
+.bg-환경   { background: #DCFCE7; }
+.bg-세계   { background: #CCFBF1; }
+.bg-역사   { background: #FEF3C7; }
+.bg-문화   { background: #EDE9FE; }
+.bg-정치   { background: #F3F4F6; }
+.bg-건강   { background: #FDF2F8; }
+.bg-WHO    { background: #F0FDF4; }
+.bg-기타   { background: var(--bg); }
+
+/* cat icons */
+.icon-과학  { font-size: 26px; }
+.icon-사회  { font-size: 26px; }
+.icon-경제  { font-size: 26px; }
+.icon-환경  { font-size: 26px; }
+.icon-세계  { font-size: 26px; }
+.icon-역사  { font-size: 26px; }
+.icon-문화  { font-size: 26px; }
+.icon-정치  { font-size: 26px; }
+.icon-건강  { font-size: 26px; }
+
+/* ── EMPTY ── */
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  display: none;
+}
+.empty .emoji { font-size: 36px; display: block; margin-bottom: 10px; }
+.empty p { font-size: 14px; color: var(--muted); }
+
+/* ── ADMIN ── */
+.fab {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+.fab:hover { transform: scale(1.08); }
+.admin-panel {
+  position: fixed;
+  bottom: 72px; right: 20px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  width: 300px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 200;
+  display: none;
+}
+.admin-panel.open { display: block; animation: slideUp 0.18s ease; }
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(8px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.admin-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.field label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.field input, .field select {
+  padding: 7px 9px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.12s;
+}
+.field input:focus, .field select:focus { border-color: var(--ink); }
+.add-btn {
+  width: 100%;
+  padding: 9px;
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+.add-btn:hover { opacity: 0.85; }
+.admin-note { font-size: 10px; color: var(--faint); margin-top: 8px; line-height: 1.5; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .hero-stats { gap: 20px; }
+  .hero-title { font-size: 22px; }
+  .card-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .topbar-right { display: none; }
+  .admin-panel { width: calc(100vw - 40px); }
+}
+@media (max-width: 400px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+mark { background: #FEF08A; border-radius: 2px; padding: 0 1px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="https://www.newscool.co" class="topbar-logo">뉴스쿨</a>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-label">이번 주 뉴스쿨 아카이브</span>
+  </div>
+  <div class="topbar-right">매주 금요일 발행 · 초등 시사 뉴스</div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-main">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="제목, 키워드, 분야 검색…" autocomplete="off">
+    </div>
+    <div class="result-count" id="resultCount"></div>
+  </div>
+</header>
+
+<!-- FILTER STRIP -->
+<div class="filter-strip">
+  <div class="filter-inner">
+    <div class="filter-group" id="yearChips"></div>
+    <div class="filter-divider"></div>
+    <div class="filter-group" id="catChips"></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Weekly Archive</div>
+      <h1 class="hero-title">매주 골라온<br><em>세상의 이야기</em></h1>
+      <p class="hero-sub">초등학생 눈높이로 쓴 시사 뉴스 · 2022년 창간호부터 지금까지</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-n" id="statTotal">136</div>
+        <div class="stat-l">전체 호수</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">4</div>
+        <div class="stat-l">발행 연수</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="empty" id="emptyState">
+    <span class="emoji">🔍</span>
+    <p>검색 결과가 없어요.</p>
+  </div>
+  <div id="cardContainer"></div>
+</div>
+
+<!-- ADMIN FAB -->
+<button class="fab" id="fabBtn" title="새 호 추가">＋</button>
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-title">✏️ 새 호 추가</div>
+  <div class="field">
+    <label>Vol. 번호</label>
+    <input type="number" id="aVol" placeholder="예) 138">
+  </div>
+  <div class="field">
+    <label>제목 (주제)</label>
+    <input type="text" id="aTitle" placeholder="기사 제목">
+  </div>
+  <div class="field">
+    <label>분야</label>
+    <select id="aCat">
+      <option>사회</option><option>과학</option><option>경제</option>
+      <option>환경</option><option>세계</option><option>역사</option>
+      <option>문화</option><option>정치</option><option>건강</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>키워드</label>
+    <input type="text" id="aKw" placeholder="예) 기후변화, 탄소">
+  </div>
+  <div class="field">
+    <label>발행일 (YYYY-MM-DD)</label>
+    <input type="text" id="aDate" placeholder="2025-03-07">
+  </div>
+  <div class="field">
+    <label>온라인 기사 URL</label>
+    <input type="text" id="aUrl" placeholder="https://www.newscool.co/...">
+  </div>
+  <div class="field">
+    <label>썸네일 URL (선택)</label>
+    <input type="text" id="aThumb" placeholder="이미지 주소">
+  </div>
+  <button class="add-btn" id="addBtn">추가하기</button>
+  <p class="admin-note">추가 항목은 이 기기에 저장됩니다.<br>Google Sheets 업데이트 후 페이지를 재배포하면 전체 반영돼요.</p>
+</div>
+
+<script>
+// ── 카테고리 색상·아이콘 ──
+const CAT_CONFIG = {
+  '과학': { icon: '🔬', dot: '#2563EB' },
+  '사회': { icon: '🏙️', dot: '#DC2626' },
+  '경제': { icon: '💰', dot: '#F59E0B' },
+  '환경': { icon: '🌿', dot: '#16A34A' },
+  '세계': { icon: '🌏', dot: '#0D9488' },
+  '역사': { icon: '📜', dot: '#92400E' },
+  '문화': { icon: '🎭', dot: '#7C3AED' },
+  '정치': { icon: '🏛️', dot: '#4B5563' },
+  '건강': { icon: '❤️', dot: '#BE185D' },
+  'WHO':  { icon: '⭐', dot: '#16A34A' },
+};
+function catConfig(c) {
+  const first = c.split(',')[0].trim();
+  return CAT_CONFIG[first] || { icon: '📰', dot: '#A8A29E' };
+}
+function catClass(c) {
+  const first = c.split(',')[0].trim();
+  return CAT_CONFIG[first] ? first : '기타';
+}
+
+// ── 내장 데이터 (CSV에서 변환) ──
+const BASE_DATA = [
+  {"vol":"136","title":"세상을 뒤바꿀 양자컴퓨터의 세계","category":"과학","keyword":"양자물리학","date":"2025-02-21","url":"","thumb":""},
+  {"vol":"135","title":"달콤한 초콜릿의 씁쓸한 비밀","category":"경제","keyword":"공정무역","date":"2025-02-14","url":"","thumb":""},
+  {"vol":"134","title":"AI 디지털교과서 논쟁은 현재진행형","category":"사회","keyword":"AI 디지털 교과서","date":"2025-02-07","url":"","thumb":""},
+  {"vol":"133","title":"나 홀로 뚜벅뚜벅 남극을 횡단하다","category":"WHO","keyword":"남극, 탐험","date":"2025-01-24","url":"","thumb":""},
+  {"vol":"132","title":"그날 하얼빈에서 생긴 일","category":"역사","keyword":"안중근","date":"2025-01-17","url":"","thumb":""},
+  {"vol":"131","title":"인공지능으로 달라진 우리집","category":"과학","keyword":"스마트홈","date":"2025-01-10","url":"","thumb":""},
+  {"vol":"130","title":"2025 을사년 새해에 달라지는 것들","category":"사회","keyword":"을사년","date":"2025-01-03","url":"","thumb":""},
+  {"vol":"129","title":"신분증이 왜 필요해? 내 얼굴이 있는데!","category":"과학","keyword":"생체인식, 개인정보","date":"2024-12-27","url":"","thumb":""},
+  {"vol":"128","title":"편리한 디지털 세상이 불편한 사람들","category":"사회","keyword":"정보지능화","date":"2024-12-20","url":"","thumb":""},
+  {"vol":"127","title":"우리나라에도 산타가 왔어요","category":"문화","keyword":"산타 클로스","date":"2024-12-13","url":"","thumb":""},
+  {"vol":"126","title":"민주주의 국가 대한민국에 계엄령이?","category":"정치","keyword":"계엄, 헌법","date":"2024-12-06","url":"","thumb":""},
+  {"vol":"125","title":"온 세상 가득 함박눈이 내렸어요","category":"과학","keyword":"폭설","date":"2024-11-29","url":"","thumb":""},
+  {"vol":"124","title":"전쟁이 벌어지면 가장 먼저 해야 할 일","category":"세계","keyword":"대피요령","date":"2024-11-22","url":"","thumb":""},
+  {"vol":"123","title":"우리 모두가 세상의 기쁨인 이유?!","category":"사회","keyword":"태아","date":"2024-11-15","url":"","thumb":""},
+  {"vol":"122","title":"태양아 네가 궁금해","category":"과학","keyword":"태양","date":"2024-11-08","url":"","thumb":""},
+  {"vol":"121","title":"우리에겐 디지털 쉼표가 필요해","category":"사회","keyword":"인권, SNS","date":"2024-11-01","url":"","thumb":""},
+  {"vol":"120","title":"동쪽 끝 작은 섬, 독도에는 누가 살았을까?","category":"역사","keyword":"독도","date":"2024-10-25","url":"","thumb":""},
+  {"vol":"119","title":"2024 노벨 문학상의 주인공 한강을 만나요","category":"문화","keyword":"노벨 문학상","date":"2024-10-18","url":"","thumb":""},
+  {"vol":"118","title":"전쟁은 이제 그만 평화를 원해요","category":"세계","keyword":"전쟁","date":"2024-10-11","url":"","thumb":""},
+  {"vol":"117","title":"국어사전이 살아있다?!","category":"문화","keyword":"국어사전","date":"2024-10-04","url":"","thumb":""},
+  {"vol":"116","title":"고양이, 개 키우려면 세금을 내라?","category":"경제","keyword":"세금","date":"2024-09-27","url":"","thumb":""},
+  {"vol":"115","title":"올해도 치솟은 한가위 물가","category":"경제","keyword":"시장","date":"2024-09-13","url":"","thumb":""},
+  {"vol":"114","title":"지금 백설공주를 다시 읽을 시간","category":"문화","keyword":"문화적 다양성","date":"2024-09-06","url":"","thumb":""},
+  {"vol":"113","title":"두 얼굴의 텔레그램","category":"사회","keyword":"딥페이크 성범죄","date":"2024-08-30","url":"","thumb":""},
+  {"vol":"112","title":"2024 역사 전쟁이 벌어졌다","category":"역사","keyword":"대한민국임시정부","date":"2024-08-23","url":"","thumb":""},
+  {"vol":"111","title":"뱅크시, 대중에게 예술을 돌려주다","category":"문화","keyword":"현대미술","date":"2024-08-16","url":"","thumb":""},
+  {"vol":"110","title":"우리는 포기를 모르는 난민 어벤저스","category":"세계","keyword":"난민","date":"2024-08-09","url":"","thumb":""},
+  {"vol":"109","title":"푹푹 찌는 찜통더위, 언제쯤 끝날까?","category":"사회","keyword":"폭염","date":"2024-08-02","url":"","thumb":""},
+  {"vol":"108","title":"우리는 편의점 왕국에 삽니다","category":"경제","keyword":"편의점","date":"2024-07-26","url":"","thumb":""},
+  {"vol":"107","title":"남들에겐 평범한 길, 누군가에겐 목숨건 길","category":"사회","keyword":"이동권","date":"2024-07-19","url":"","thumb":""},
+  {"vol":"106","title":"영화 '마션'처럼 화성 1년 살기 어때요?","category":"과학","keyword":"화성, NASA","date":"2024-07-12","url":"","thumb":""},
+  {"vol":"105","title":"세계인의 스포츠 축제, 올림픽이 열려요","category":"사회","keyword":"올림픽","date":"2024-07-05","url":"","thumb":""},
+  {"vol":"104","title":"내 마음도 '인사이드 아웃'","category":"문화","keyword":"사춘기, 감정","date":"2024-06-28","url":"","thumb":""},
+  {"vol":"103","title":"\"관광객은 오지 마세요\"","category":"세계","keyword":"오버 투어리즘","date":"2024-06-21","url":"","thumb":""},
+  {"vol":"102","title":"뜨거운 감자가 된 배달 앱 수수료","category":"경제","keyword":"플랫폼, 수수료","date":"2024-06-14","url":"","thumb":""},
+  {"vol":"101","title":"한반도에서 벌어진 풍선전쟁","category":"사회","keyword":"분단, 통일","date":"2024-06-07","url":"","thumb":""},
+  {"vol":"100","title":"가짜 치즈에 속지마세요!","category":"사회","keyword":"모조치즈, 영양소","date":"2024-05-31","url":"","thumb":""},
+  {"vol":"99","title":"챗GPT 때문에 전기가 부족해?","category":"과학","keyword":"챗GPT, 전력난","date":"2024-05-24","url":"","thumb":""},
+  {"vol":"98","title":"우리가 기억해야 할 5.18","category":"역사","keyword":"5.18, 민주화","date":"2024-05-17","url":"","thumb":""},
+  {"vol":"97","title":"구름에 구름씨를 뿌리면 생기는 일","category":"과학","keyword":"인공강우, 구름씨","date":"2024-05-10","url":"","thumb":""},
+  {"vol":"96","title":"노키즈존 No, 예스키즈존 Yes!","category":"사회","keyword":"노키즈존, 아동인권","date":"2024-05-03","url":"","thumb":""},
+  {"vol":"95","title":"쿨리, 기업의 주인이 되다…주식과 주주","category":"경제","keyword":"주식, 투자","date":"2024-04-26","url":"","thumb":""},
+  {"vol":"94","title":"달콤짭짤 짜파게티, 세계를 휘감다","category":"경제","keyword":"수출, 모디슈머","date":"2024-04-19","url":"","thumb":""},
+  {"vol":"93","title":"4월 16일은 안전을 이야기하는 날","category":"사회","keyword":"세월호, 안전","date":"2024-04-12","url":"","thumb":""},
+  {"vol":"92","title":"무엇이든 아껴 쓰면 벌어지는 마법","category":"경제","keyword":"절약, 짠테크","date":"2024-04-05","url":"","thumb":""},
+  {"vol":"91","title":"머릿속 칩이 내 생각을 읽는다?","category":"과학","keyword":"뇌파, 신경","date":"2024-03-29","url":"","thumb":""},
+  {"vol":"90","title":"특명! 빙하를 지켜라!","category":"환경","keyword":"기후변화, 빙하","date":"2024-03-22","url":"","thumb":""},
+  {"vol":"89","title":"4월 10일 민주주의의 꽃을 피워요","category":"정치","keyword":"선거, 민주주의","date":"2024-03-15","url":"","thumb":""},
+  {"vol":"88","title":"유튜브에 빠진 뇌를 구해줘!","category":"과학","keyword":"유튜브, 도파민","date":"2024-03-08","url":"","thumb":""},
+  {"vol":"87","title":"한반도 뒤덮은 \"대한독립만세\"","category":"역사","keyword":"삼일절, 독립운동","date":"2024-03-01","url":"","thumb":""},
+  {"vol":"86","title":"안락사와 존엄한 죽음","category":"사회","keyword":"안락사","date":"2024-02-23","url":"","thumb":""},
+  {"vol":"85","title":"뜨거운 감자가 된 의대 증원","category":"사회","keyword":"토론","date":"2024-02-16","url":"","thumb":""},
+  {"vol":"84","title":"쿨리, 용돈 협상의 마지막 퍼즐을 맞추다","category":"경제","keyword":"소비, 저축","date":"2024-02-02","url":"","thumb":""},
+  {"vol":"83","title":"쿨리, 용돈 협상을 하다","category":"경제","keyword":"물가, 절약","date":"2024-01-26","url":"","thumb":""},
+  {"vol":"82","title":"그 많던 동해 오징어는 어디로 갔을까?","category":"환경","keyword":"지구온난화","date":"2024-01-19","url":"","thumb":""},
+  {"vol":"81","title":"하늘 나는 자동차가 온다","category":"과학","keyword":"스마트 모빌리티","date":"2024-01-12","url":"","thumb":""},
+  {"vol":"80","title":"에버랜드에 미키마우스가 없는 이유","category":"문화","keyword":"저작권","date":"2024-01-05","url":"","thumb":""},
+  {"vol":"79","title":"'Bibimbap'으로 전 세계를 비볐다?!","category":"문화","keyword":"K푸드, 세계화","date":"2023-12-22","url":"","thumb":""},
+  {"vol":"78","title":"인류 역사 바꿀 유전자 가위","category":"과학","keyword":"유전자 가위","date":"2023-12-15","url":"","thumb":""},
+  {"vol":"77","title":"우리 학교 신입생이 사라졌어요!","category":"사회","keyword":"저출생","date":"2023-12-08","url":"","thumb":""},
+  {"vol":"76","title":"\"배달왔어요\" 거리 누비는 배달로봇","category":"과학","keyword":"지능형 로봇","date":"2023-12-01","url":"","thumb":""},
+  {"vol":"75","title":"법을 비웃는 아이들","category":"사회","keyword":"촉법소년","date":"2023-11-24","url":"","thumb":""},
+  {"vol":"74","title":"2023년, 어린이는 고통 속에 산다","category":"사회","keyword":"아동권리","date":"2023-11-17","url":"","thumb":""},
+  {"vol":"73","title":"아이돌도 팬도 '지구 살리기' 힘 합쳤다","category":"환경","keyword":"플라스틱","date":"2023-11-10","url":"","thumb":""},
+  {"vol":"72","title":"줄고 또 줄어드는 과자, 초콜릿","category":"경제","keyword":"슈링크플레이션","date":"2023-11-03","url":"","thumb":""},
+  {"vol":"71","title":"11살 벨라, 넓은 바다로 돌아갈 수 있을까?","category":"과학","keyword":"고래, 서식지","date":"2023-10-27","url":"","thumb":""},
+  {"vol":"70","title":"딥페이크를 아시나요?","category":"사회","keyword":"딥페이크","date":"2023-10-20","url":"","thumb":""},
+  {"vol":"69","title":"50년 만에 다시 터진 중동 화약고","category":"세계","keyword":"이-팔 전쟁","date":"2023-10-13","url":"","thumb":""},
+  {"vol":"68","title":"[한글날 특집] 한글을 지켜낸 숨은 주역들","category":"역사","keyword":"국어사전","date":"2023-10-06","url":"","thumb":""},
+  {"vol":"67","title":"세계의 문화유산이 된 '가야'","category":"역사","keyword":"가야, 문화재","date":"2023-09-22","url":"","thumb":""},
+  {"vol":"66","title":"달콤한 탕후루의 쓰디쓴 배신","category":"건강","keyword":"당, 비만","date":"2023-09-15","url":"","thumb":""},
+  {"vol":"65","title":"100년 전의 비극, 간토대학살을 아시나요?","category":"역사","keyword":"대학살","date":"2023-09-08","url":"","thumb":""},
+  {"vol":"64","title":"귀염둥이 판다 푸바오와 외교 이야기","category":"정치","keyword":"외교","date":"2023-09-01","url":"","thumb":""},
+  {"vol":"63","title":"우리나라가 빚더미에 앉았다?","category":"경제","keyword":"빚, 부채","date":"2023-08-25","url":"","thumb":""},
+  {"vol":"62","title":"묻지마 범죄, 사형으로 해결될까?","category":"사회","keyword":"사형제","date":"2023-08-18","url":"","thumb":""},
+  {"vol":"61","title":"기후변화에 엘니뇨까지…몸살 앓는 지구","category":"환경","keyword":"슈퍼 엘니뇨","date":"2023-07-28","url":"","thumb":""},
+  {"vol":"60","title":"더 치열해진 문 프로젝트","category":"과학","keyword":"달 탐사","date":"2023-07-21","url":"","thumb":""},
+  {"vol":"59","title":"AI로봇들이 기자회견을 열었다","category":"과학","keyword":"AI 윤리","date":"2023-07-14","url":"","thumb":""},
+  {"vol":"58","title":"태어나자마자 사라진 '그림자 아기들'","category":"사회","keyword":"출생통보제","date":"2023-07-07","url":"","thumb":""},
+  {"vol":"57","title":"올릴까, 말까? 최저임금을 알아봐","category":"경제","keyword":"최저임금","date":"2023-06-30","url":"","thumb":""},
+  {"vol":"56","title":"원전수 공포와 소금 대란","category":"사회","keyword":"소금","date":"2023-06-23","url":"","thumb":""},
+  {"vol":"55","title":"아마존 숲에서 40일…기적을 일군 아이들","category":"세계","keyword":"아마존, 재난","date":"2023-06-16","url":"","thumb":""},
+  {"vol":"54","title":"아름다운 설악산에 케이블카를?","category":"환경","keyword":"서식지","date":"2023-06-09","url":"","thumb":""},
+  {"vol":"53","title":"[현충일 특집] 호국영웅을 기억하는 시간","category":"역사","keyword":"분단","date":"2023-06-02","url":"","thumb":""},
+  {"vol":"52","title":"악플과의 전쟁","category":"사회","keyword":"악플","date":"2023-05-26","url":"","thumb":""},
+  {"vol":"51","title":"스쿨존이 위험해요","category":"사회","keyword":"스쿨존","date":"2023-05-19","url":"","thumb":""},
+  {"vol":"50","title":"캐치티니핑에 투자하는 법","category":"경제","keyword":"주식, 투자","date":"2023-05-12","url":"","thumb":""},
+  {"vol":"49","title":"셰어런팅을 다시 생각하다","category":"사회","keyword":"잊힐권리","date":"2023-04-28","url":"","thumb":""},
+  {"vol":"48","title":"황사의 습격","category":"사회","keyword":"황사, 사막화","date":"2023-04-21","url":"","thumb":""},
+  {"vol":"47","title":"반세기만에 공개된 세계 최고 금속활자본 직지","category":"역사","keyword":"금속활자","date":"2023-04-14","url":"","thumb":""},
+  {"vol":"46","title":"현대미술이 뭐길래?","category":"문화","keyword":"현대미술","date":"2023-04-07","url":"","thumb":""},
+  {"vol":"45","title":"제주 4·3을 기억하다","category":"역사","keyword":"한국현대사","date":"2023-03-31","url":"","thumb":""},
+  {"vol":"44","title":"꿀벌이 사라진 이유","category":"과학","keyword":"생태계","date":"2023-03-24","url":"","thumb":""},
+  {"vol":"43","title":"가짜 단맛 인공감미료의 모든 것","category":"과학","keyword":"인공감미료","date":"2023-03-17","url":"","thumb":""},
+  {"vol":"42","title":"학교폭력에 분노하는 대한민국","category":"사회","keyword":"학교폭력","date":"2023-03-10","url":"","thumb":""},
+  {"vol":"41","title":"챗GPT 선생님 질문있어요!","category":"과학","keyword":"인공지능","date":"2023-03-03","url":"","thumb":""},
+  {"vol":"40","title":"로알드 달 소설을 다시 쓴 이유","category":"문화","keyword":"고정관념","date":"2023-02-24","url":"","thumb":""},
+  {"vol":"39","title":"지하철도 버스도 적자 행진?","category":"경제","keyword":"기업, 이윤","date":"2023-02-17","url":"","thumb":""},
+  {"vol":"38","title":"수 만 명의 희생자 남긴 튀르키예 대지진","category":"세계","keyword":"재난","date":"2023-02-10","url":"","thumb":""},
+  {"vol":"37","title":"벼랑 끝에 선 아프간 아이들","category":"세계","keyword":"빈곤","date":"2023-02-03","url":"","thumb":""},
+  {"vol":"36","title":"우주에도 쓰레기 청소부가 있다고?","category":"과학","keyword":"우주쓰레기","date":"2023-01-27","url":"","thumb":""},
+  {"vol":"35","title":"나랏돈도 내 용돈도 '예산'이 필요해","category":"경제","keyword":"용돈관리","date":"2022-12-14","url":"","thumb":""},
+  {"vol":"34","title":"돌고래쇼가 사라진대!","category":"환경","keyword":"동물학대","date":"2022-12-07","url":"","thumb":""},
+  {"vol":"33","title":"비닐봉지 좀 없애봅시다!","category":"환경","keyword":"환경보호","date":"2022-11-30","url":"","thumb":""},
+  {"vol":"32","title":"세계 인구 80억 명 돌파","category":"세계","keyword":"인구","date":"2022-11-23","url":"","thumb":""},
+  {"vol":"31","title":"카타르 월드컵 코 앞으로","category":"세계","keyword":"월드컵","date":"2022-11-16","url":"","thumb":""},
+  {"vol":"30","title":"살아돌아온 광부 아저씨들이 우리에게 준 선물","category":"사회","keyword":"광물","date":"2022-11-09","url":"","thumb":""},
+  {"vol":"29","title":"이태원 참사 그 후…해야만 하는 이야기","category":"사회","keyword":"참사","date":"2022-11-02","url":"","thumb":""},
+  {"vol":"28","title":"킹달러와 환율","category":"경제","keyword":"환율","date":"2022-10-26","url":"","thumb":""},
+  {"vol":"27","title":"인간 뛰어넘는 AI 화가의 등장","category":"과학","keyword":"인공지능","date":"2022-10-19","url":"","thumb":""},
+  {"vol":"26","title":"[한글날 특집] 감기 빨리 낳으세요?!","category":"사회","keyword":"맞춤법","date":"2022-10-12","url":"","thumb":""},
+  {"vol":"25","title":"전기로 나는 비행기의 비밀","category":"환경","keyword":"친환경","date":"2022-10-05","url":"","thumb":""},
+  {"vol":"24","title":"실외에선 마스크 안 써도 돼","category":"사회","keyword":"코로나19","date":"2022-09-28","url":"","thumb":""},
+  {"vol":"23","title":"지구가 유일한 주인이라는 이 회사","category":"경제","keyword":"윤리경영","date":"2022-09-21","url":"","thumb":""},
+  {"vol":"22","title":"굿바이 엘리자베스 2세 여왕","category":"세계","keyword":"정치체제","date":"2022-09-14","url":"","thumb":""},
+  {"vol":"21","title":"줄까지 서서 사먹는 반값치킨, 흥행 이유는?","category":"경제","keyword":"불황, 원가","date":"2022-08-24","url":"","thumb":""},
+  {"vol":"20","title":"우리가 미처 들여다보지 않았던 반지하","category":"경제","keyword":"부동산","date":"2022-08-17","url":"","thumb":""},
+  {"vol":"19","title":"로봇을 구독하시겠습니까?","category":"과학","keyword":"로봇","date":"2022-08-10","url":"","thumb":""},
+  {"vol":"18","title":"휴대용선풍기 논쟁 들여다보기","category":"사회","keyword":"전자파","date":"2022-08-03","url":"","thumb":""},
+  {"vol":"17","title":"우영우 드라마를 보는 우리의 자세","category":"사회","keyword":"차별","date":"2022-07-27","url":"","thumb":""},
+  {"vol":"16","title":"통장 속 돈이 불어나는 마법","category":"경제","keyword":"금리","date":"2022-07-20","url":"","thumb":""},
+  {"vol":"15","title":"한여름도 아닌데 나를 찾아온 '폭염'","category":"사회","keyword":"기후불평등","date":"2022-07-13","url":"","thumb":""},
+  {"vol":"14","title":"우리 아이 노리는 디지털 세상 그놈들","category":"사회","keyword":"범죄","date":"2022-07-06","url":"","thumb":""},
+  {"vol":"13","title":"원숭이두창 한국 상륙","category":"사회","keyword":"전염병","date":"2022-06-29","url":"","thumb":""},
+  {"vol":"12","title":"하루 2만 마리 새들 목숨 앗아가는 '이것'","category":"환경","keyword":"동물권","date":"2022-06-22","url":"","thumb":""},
+  {"vol":"11","title":"레고 가격 또 오른다","category":"경제","keyword":"물가","date":"2022-06-15","url":"","thumb":""},
+  {"vol":"10","title":"100일 넘긴 러-우크라 전쟁","category":"세계","keyword":"전쟁, 평화","date":"2022-06-08","url":"","thumb":""},
+  {"vol":"9","title":"국내 첫 무인 달 탐사선 다누리","category":"과학","keyword":"우주산업","date":"2022-06-01","url":"","thumb":""},
+  {"vol":"8","title":"6월1일은 무슨 날일까요? 투표해요!","category":"정치","keyword":"지방자치","date":"2022-05-25","url":"","thumb":""},
+  {"vol":"7","title":"전동 킥보드법 시행 1년","category":"사회","keyword":"준법","date":"2022-05-18","url":"","thumb":""},
+  {"vol":"6","title":"새 대통령이 취임했어요","category":"정치","keyword":"대통령","date":"2022-05-11","url":"","thumb":""},
+  {"vol":"5","title":"셰어런팅을 아시나요?","category":"사회","keyword":"SNS","date":"2022-05-04","url":"","thumb":""},
+  {"vol":"4","title":"1500원짜리 포켓몬빵, 2만원에 팔리는 이유","category":"경제","keyword":"가격","date":"2022-04-27","url":"","thumb":""},
+  {"vol":"3","title":"우리 몸에 플라스틱이 쌓인다","category":"환경","keyword":"미세플라스틱","date":"2022-04-20","url":"","thumb":""},
+  {"vol":"2","title":"꿀벌 실종사건의 전말은?","category":"환경","keyword":"기후변화","date":"2022-04-13","url":"","thumb":""},
+  {"vol":"1","title":"이제 곧 마스크를 벗는다고?","category":"사회","keyword":"코로나19","date":"2022-04-06","url":"","thumb":""}
+];
+
+// ── 로컬 추가분 병합 ──
+function getAllData() {
+  const local = JSON.parse(localStorage.getItem('nc_added') || '[]');
+  return [...local, ...BASE_DATA];
+}
+
+// ── 상태 ──
+let activeYear = 'all';
+let activeCat  = 'all';
+let searchQ    = '';
+
+// ── 연도·분야 목록 ──
+const YEARS = ['2025','2024','2023','2022'];
+const CATS  = ['사회','과학','경제','환경','세계','역사','문화','정치','건강'];
+
+// ── 필터 칩 렌더 ──
+function buildFilters() {
+  const yc = document.getElementById('yearChips');
+  const cc = document.getElementById('catChips');
+
+  const allYearBtn = makeChip('전체', 'year', 'all', true);
+  yc.appendChild(allYearBtn);
+  YEARS.forEach(y => yc.appendChild(makeChip(y+'년', 'year', y)));
+
+  const allCatBtn = makeChip('전체', 'cat', 'all', true);
+  cc.appendChild(allCatBtn);
+  CATS.forEach(c => {
+    const cfg = catConfig(c);
+    const dot = document.createElement('span');
+    dot.className = 'chip-dot';
+    dot.style.background = cfg.dot;
+    const btn = makeChip(c, 'cat', c);
+    btn.insertBefore(dot, btn.firstChild);
+    cc.appendChild(btn);
+  });
+}
+
+function makeChip(label, type, value, isActive = false) {
+  const btn = document.createElement('button');
+  btn.className = 'chip' + (isActive ? ' active' : '');
+  btn.textContent = label;
+  btn.dataset.type = type;
+  btn.dataset.value = value;
+  btn.addEventListener('click', () => setFilter(type, value));
+  return btn;
+}
+
+function setFilter(type, value) {
+  if (type === 'year') activeYear = value;
+  else activeCat = value;
+
+  document.querySelectorAll(`.chip[data-type="${type}"]`).forEach(b => {
+    b.classList.remove('active');
+    if (type === 'cat') {
+      CATS.forEach(c => b.classList.remove(`cat-active-${c}`));
+    }
+  });
+
+  const target = document.querySelector(`.chip[data-type="${type}"][data-value="${value}"]`);
+  if (target) {
+    if (type === 'cat' && value !== 'all') {
+      target.classList.add(`cat-active-${value}`);
+    } else {
+      target.classList.add('active');
+    }
+  }
+  render();
+}
+
+// ── 검색 ──
+let searchTimer;
+document.getElementById('searchInput').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { searchQ = e.target.value.trim(); render(); }, 180);
+});
+
+// ── 필터링 ──
+function filterData() {
+  const q = searchQ.toLowerCase();
+  return getAllData().filter(item => {
+    const yearOk = activeYear === 'all' || (item.date && item.date.startsWith(activeYear));
+    const catOk  = activeCat  === 'all' || item.category.includes(activeCat);
+    const searchOk = !q ||
+      item.title.toLowerCase().includes(q) ||
+      item.keyword.toLowerCase().includes(q) ||
+      item.category.toLowerCase().includes(q) ||
+      item.vol.includes(q);
+    return yearOk && catOk && searchOk;
+  });
+}
+
+// ── 렌더 ──
+function render() {
+  const items = filterData();
+  const container = document.getElementById('cardContainer');
+  const empty = document.getElementById('emptyState');
+  const count = document.getElementById('resultCount');
+
+  count.innerHTML = `<b>${items.length}</b>개`;
+
+  if (items.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // 연도 그룹
+  const groups = {};
+  items.forEach(item => {
+    const yr = item.date ? item.date.slice(0, 4) : '미정';
+    if (!groups[yr]) groups[yr] = [];
+    groups[yr].push(item);
+  });
+
+  const sortedYears = Object.keys(groups).sort((a, b) => b - a);
+  let html = '';
+  sortedYears.forEach(yr => {
+    if (activeYear === 'all') {
+      html += `<div class="year-divider">
+        <span class="year-num">${yr}</span>
+        <div class="year-line"></div>
+        <span class="year-count">${groups[yr].length}개</span>
+      </div>`;
+    }
+    html += `<div class="card-grid">`;
+    groups[yr].forEach((item, i) => { html += renderCard(item, i); });
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function hl(text, q) {
+  if (!q) return esc(text);
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return esc(text).replace(re, '<mark>$1</mark>');
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderCard(item, idx) {
+  const delay = Math.min(idx * 25, 250);
+  const cfg = catConfig(item.category);
+  const cc  = catClass(item.category);
+  const dateStr = item.date ? item.date.replace(/-/g, '.') : '';
+  const q = searchQ;
+
+  const thumbHtml = item.thumb
+    ? `<img src="${esc(item.thumb)}" alt="${esc(item.title)}" loading="lazy"
+         onerror="this.parentElement.innerHTML='<div class=\\'thumb-placeholder bg-${cc}\\'><span class=\\'cat-icon\\'>${cfg.icon}</span></div>'">`
+    : `<div class="thumb-placeholder bg-${cc}"><span class="cat-icon">${cfg.icon}</span></div>`;
+
+  const link = item.url || 'https://www.newscool.co/tag/weekly/';
+  const target = item.url ? 'target="_blank" rel="noopener"' : '';
+
+  return `<a class="card" href="${esc(link)}" ${target} style="animation-delay:${delay}ms">
+    <div class="card-thumb">
+      ${thumbHtml}
+      <span class="vol-badge">Vol.${esc(item.vol)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="cat-tag cat-${cc}">${hl(item.category.split(',')[0].trim(), q)}</span>
+        <span class="card-date">${dateStr}</span>
+      </div>
+      <div class="card-title">${hl(item.title, q)}</div>
+      ${item.keyword ? `<div class="card-keyword"># ${hl(item.keyword, q)}</div>` : ''}
+    </div>
+  </a>`;
+}
+
+// ── 어드민 ──
+document.getElementById('fabBtn').addEventListener('click', () => {
+  document.getElementById('adminPanel').classList.toggle('open');
+});
+document.getElementById('addBtn').addEventListener('click', () => {
+  const item = {
+    vol:      document.getElementById('aVol').value.trim(),
+    title:    document.getElementById('aTitle').value.trim(),
+    category: document.getElementById('aCat').value,
+    keyword:  document.getElementById('aKw').value.trim(),
+    date:     document.getElementById('aDate').value.trim(),
+    url:      document.getElementById('aUrl').value.trim(),
+    thumb:    document.getElementById('aThumb').value.trim(),
+
+  };
+  if (!item.vol || !item.title) { alert('Vol. 번호와 제목은 필수예요.'); return; }
+  const local = JSON.parse(localStorage.getItem('nc_added') || '[]');
+  local.unshift(item);
+  localStorage.setItem('nc_added', JSON.stringify(local));
+  ['aVol','aTitle','aKw','aDate','aUrl','aThumb'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('adminPanel').classList.remove('open');
+  render();
+  alert('✅ 추가됐어요!');
+});
+
+// ── 초기화 ──
+buildFilters();
+render();
+</script>
+</body>
+</html>
