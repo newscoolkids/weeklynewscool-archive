@@ -971,7 +971,6 @@ document.getElementById('addBtn').addEventListener('click', () => {
     date:     document.getElementById('aDate').value.trim(),
     url:      document.getElementById('aUrl').value.trim(),
     thumb:    document.getElementById('aThumb').value.trim(),
-
   };
   if (!item.vol || !item.title) { alert('Vol. 번호와 제목은 필수예요.'); return; }
   const local = JSON.parse(localStorage.getItem('nc_added') || '[]');
