@@ -123,27 +123,39 @@ header {
 .filter-strip {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  overflow: hidden;
 }
-.filter-inner {
+.filter-rows {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 40px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  flex-direction: column;
+  gap: 0;
 }
-.filter-inner::-webkit-scrollbar { display: none; }
-.filter-group {
+.filter-row {
   display: flex;
   align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
+  gap: 6px;
+  height: 38px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
 }
-.filter-divider {
+.filter-row:last-child { border-bottom: none; }
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-row-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 28px;
+}
+.filter-group {
+  display: flex;
+  align-items: ce.filter-divider {
   width: 1px;
   height: 16px;
   background: var(--border);
@@ -282,7 +294,7 @@ header {
   align-items: center;
   border-bottom: 2px solid var(--ink);
   position: sticky;
-  top: 92px;
+  top: 128px;
   z-index: 50;
   background: var(--bg);
 }
@@ -539,14 +551,21 @@ mark { background: #FEF08A; border-radius: 2px; padding: 0 1px; }
 
 <!-- FILTER STRIP -->
 <div class="filter-strip">
-  <div class="filter-inner">
-    <div class="filter-group" id="yearChips"></div>
-    <div class="filter-divider"></div>
-    <div class="filter-group" id="catChips"></div>
-    <div class="filter-divider"></div>
-    <div class="filter-group" id="subjectChips"></div>
-    <div class="filter-divider"></div>
-    <div class="filter-group" id="gradeChips"></div>
+  <div class="filter-rows">
+    <div class="filter-row">
+      <span class="filter-row-label">연도</span>
+      <div class="filter-group" id="yearChips"></div>
+      <div class="filter-divider"></div>
+      <span class="filter-row-label">분야</span>
+      <div class="filter-group" id="catChips"></div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-row-label">교과</span>
+      <div class="filter-group" id="subjectChips"></div>
+      <div class="filter-divider"></div>
+      <span class="filter-row-label">학년</span>
+      <div class="filter-group" id="gradeChips"></div>
+    </div>
   </div>
 </div>
 
