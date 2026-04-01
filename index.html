@@ -7,145 +7,84 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>
-/* --- [1. 디자인 변수 & 초기화] --- */
+/* --- 디자인 변수 --- */
 :root {
-  --newscool-green: #56c16f; /* 쿨리 그린 */
-  --newscool-orange: #ffae00; /* 뉴쌤 오렌지 */
-  --ink: #1C1917;
-  --ink2: #44403C;
-  --muted: #78716C;
-  --faint: #A8A29E;
-  --border: #E7E5E4;
-  --bg: #FAFAF9;
-  --surface: #FFFFFF;
-  --sans: 'Noto Sans KR', sans-serif;
-  --serif: 'Noto Serif KR', serif;
-  --blue: #2563EB; --blue-l: #DBEAFE;
-  --red: #DC2626; --red-l: #FEE2E2;
-  --yellow: #F59E0B; --yellow-l: #FEF3C7;
-  --green: #16A34A; --green-l: #DCFCE7;
-  --teal: #0D9488; --teal-l: #CCFBF1;
-  --purple: #7C3AED; --purple-l: #EDE9FE;
+  --newscool-green: #56c16f; --newscool-orange: #ffae00;
+  --ink: #1C1917; --muted: #78716C; --faint: #A8A29E;
+  --border: #E7E5E4; --bg: #FAFAF9; --surface: #FFFFFF;
+  --sans: 'Noto Sans KR', sans-serif; --serif: 'Noto Serif KR', serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; color: inherit; }
 
-/* --- [2. 상단 통합 헤더 (Black)] --- */
+/* --- 상단 블랙 헤더 --- */
 .main-header {
   background: #000; color: #fff; height: 80px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 40px; position: sticky; top: 0; z-index: 1000;
 }
 .header-logo img { height: 32px; display: block; }
-.main-nav { display: flex; gap: 18px; list-style: none; align-items: center; }
-.main-nav a { font-size: 13px; font-weight: 700; transition: color 0.2s; color: rgba(255,255,255,0.8); white-space: nowrap; }
+.main-nav { display: flex; gap: 18px; list-style: none; }
+.main-nav a { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); white-space: nowrap; }
 .main-nav a:hover, .main-nav a.active { color: var(--newscool-green); }
-.nav-highlight { color: #de83fe !important; }
 
-/* --- [3. 아카이브 툴바 & 필터 (White)] --- */
+/* --- 검색 및 필터 바 --- */
 .archive-toolbar {
   background: var(--surface); border-bottom: 1px solid var(--border);
   padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 20px;
   position: sticky; top: 80px; z-index: 999;
 }
 .search-box { flex: 1; max-width: 400px; position: relative; }
-.search-box input {
-  width: 100%; height: 38px; padding: 0 12px 0 38px;
-  border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 14px; background: var(--bg); outline: none;
-}
-.search-box input:focus { border-color: var(--ink); background: #fff; }
+.search-box input { width: 100%; height: 38px; padding: 0 12px 0 38px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
 .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--faint); }
 
 .filter-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 0; }
-.filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 8px;}
+.filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 .filter-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-.filter-row::-webkit-scrollbar { display: none; }
-.filter-row-label { font-size: 11px; font-weight: 900; color: var(--faint); text-transform: uppercase; min-width: 35px; }
+.filter-row-label { font-size: 11px; font-weight: 900; color: var(--faint); min-width: 35px; }
 .filter-group { display: flex; gap: 6px; }
-.filter-divider { width: 1px; height: 14px; background: var(--border); margin: 0 4px; }
-
-.chip {
-  height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid var(--border);
-  font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; align-items: center; transition: 0.1s;
-}
+.chip { height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; align-items: center; }
 .chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
 
-/* --- [4. 히어로 & 리스트] --- */
-.hero { background: var(--ink); color: #fff; padding: 40px 20px; }
-.hero-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; }
-.hero-title { font-family: var(--serif); font-size: 28px; line-height: 1.2; }
-.hero-title em { font-style: normal; color: var(--newscool-orange); }
-.hero-sub { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-.hero-stats { display: flex; gap: 24px; text-align: right; }
-.stat-n { font-family: var(--serif); font-size: 32px; font-weight: 900; }
-.stat-l { font-size: 10px; color: rgba(255,255,255,0.4); }
-
-.main { max-width: 1100px; margin: 0 auto; padding: 20px 20px 80px; }
-.list-header {
-  display: grid; grid-template-columns: 52px 84px 44px 1fr 160px 72px;
-  height: 32px; align-items: center; border-bottom: 2px solid var(--ink);
-  font-size: 10px; font-weight: 700; color: var(--faint); text-transform: uppercase;
-}
-.list-row {
-  display: grid; grid-template-columns: 52px 84px 44px 1fr 160px 72px;
-  min-height: 54px; align-items: center; border-bottom: 1px solid var(--border);
-  transition: background 0.1s; cursor: pointer;
-}
+/* --- 리스트 --- */
+.main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+.list-header { display: grid; grid-template-columns: 50px 90px 40px 1fr 180px 80px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); font-size: 11px; color: var(--faint); font-weight: 700; }
+.list-row { display: grid; grid-template-columns: 50px 90px 40px 1fr 180px 80px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; }
 .list-row:hover { background: #f5f4f2; }
-.col-vol { font-size: 11px; font-weight: 600; color: var(--faint); padding-left: 4px; }
-.col-date { font-size: 11px; color: var(--faint); }
-.col-title { padding: 10px 0; display: flex; flex-direction: column; gap: 2px; }
-.row-title { font-size: 14px; font-weight: 700; color: var(--ink); }
-.row-kw { font-size: 11px; color: var(--faint); }
-.col-cat { display: flex; justify-content: flex-end; }
-.cat-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+.row-title { font-weight: 700; font-size: 14px; }
+.cat-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #eee; }
 
-/* 카테고리 색상 */
-.cat-과학 { background: var(--blue-l); color: var(--blue); }
-.cat-사회 { background: var(--red-l); color: var(--red); }
-.cat-경제 { background: var(--yellow-l); color: #92400E; }
-.cat-환경 { background: var(--green-l); color: var(--green); }
+/* 상태 표시 */
+#statusMsg { text-align: center; padding: 100px 20px; font-weight: 500; color: var(--muted); }
 
-/* 모바일 대응 */
 @media (max-width: 900px) {
   .main-nav { display: none; }
-  .list-header, .list-row { grid-template-columns: 44px 1fr 70px; }
-  .h-date, .h-curr, .col-date, .col-curr { display: none; }
+  .list-header, .list-row { grid-template-columns: 40px 1fr 70px; }
+  .col-date, .col-curr, .h-date, .h-curr { display: none; }
 }
-
-/* FAB & Admin */
-.fab { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: white; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1001; }
 </style>
 </head>
 <body>
 
 <header class="main-header">
-  <a href="https://www.newscool.co" class="header-logo">
-    <img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨">
-  </a>
+  <a href="https://www.newscool.co" class="header-logo"><img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨"></a>
   <ul class="main-nav">
     <li><a href="https://www.newscool.co/guidetonewscool/">활용 꿀팁</a></li>
     <li><a href="https://www.newscool.co/tag/news/">News</a></li>
     <li><a href="https://www.newscool.co/tag/tv/">뉴스쿨TV</a></li>
-    <li><a href="https://www.newscool.co/event-prenewscool/">프리 뉴스쿨</a></li>
-    <li><a href="https://www.newscool.co/tag/bookclub/">북클럽</a></li>
     <li><a href="#" class="active">아카이브</a></li>
     <li><a href="https://www.newscool.co/shop/">스토어</a></li>
-    <li><a href="https://contents.premium.naver.com/dailynewscool/newscooling" target="_blank" class="nav-highlight">뉴스100</a></li>
   </ul>
 </header>
 
 <div class="archive-toolbar">
   <div class="search-box">
-    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-      <circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/>
-    </svg>
-    <input type="text" id="searchInput" placeholder="뉴스 제목, 키워드 검색..." autocomplete="off">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/></svg>
+    <input type="text" id="searchInput" placeholder="뉴스 제목 검색..." autocomplete="off">
   </div>
-  <div class="result-count" id="resultCount">0개</div>
+  <div id="resultCount" style="font-size:12px; color:var(--muted);">0개</div>
 </div>
 
 <div class="filter-strip">
@@ -153,139 +92,122 @@ a { text-decoration: none; color: inherit; }
     <div class="filter-row">
       <span class="filter-row-label">연도</span>
       <div class="filter-group" id="yearChips"></div>
-      <div class="filter-divider"></div>
-      <span class="filter-row-label">분야</span>
-      <div class="filter-group" id="catChips"></div>
-    </div>
-  </div>
-</div>
-
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1 class="hero-title">매주 골라온<br><em>세상의 이야기</em></h1>
-      <p class="hero-sub">초등학생 눈높이 시사 뉴스 · 창간호부터 현재까지</p>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-n" id="statTotal">0</div><div class="stat-l">전체 호수</div></div>
     </div>
   </div>
 </div>
 
 <div class="main">
-  <div class="list-header">
-    <span>No.</span><span class="h-date">발행일</span><span></span><span>제목 · 키워드</span><span class="h-curr">교과 연계</span><span style="text-align:right">분야</span>
+  <div id="statusMsg">데이터를 불러오는 중입니다...</div>
+  <div id="listTable" style="display:none;">
+    <div class="list-header">
+      <span>No.</span><span class="h-date">발행일</span><span></span><span>제목</span><span class="h-curr">교과</span><span style="text-align:right">분야</span>
+    </div>
+    <div id="cardContainer"></div>
   </div>
-  <div id="cardContainer"></div>
 </div>
 
-<button class="fab" onclick="window.open('https://docs.google.com/spreadsheets/d/1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/edit', '_blank')">＋</button>
-
 <script>
-/* --- [데이터 & 로직] --- */
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/pub?output=csv&gid=0';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/pub?output=csv&gid=0';
 
 let _data = [];
-let activeYear = 'all', activeCat = 'all', searchQ = '';
+let activeYear = 'all', searchQ = '';
 
-const CATS = ['사회','과학','경제','환경','세계','역사','문화','정치','건강'];
-const YEARS = ['2026', '2025', '2024', '2023', '2022'];
-
-// 필터 버튼 생성
-function initFilters() {
+function initYearFilters() {
   const yc = document.getElementById('yearChips');
-  const cc = document.getElementById('catChips');
-  
-  yc.innerHTML = cc.innerHTML = '';
-  
-  yc.appendChild(createChip('전체', 'year', 'all', true));
-  YEARS.forEach(y => yc.appendChild(createChip(y+'년', 'year', y)));
-  
-  cc.appendChild(createChip('전체', 'cat', 'all', true));
-  CATS.forEach(c => cc.appendChild(createChip(c, 'cat', c)));
+  yc.innerHTML = '';
+  const years = ['all', '2026', '2025', '2024', '2023', '2022'];
+  years.forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (y === activeYear ? ' active' : '');
+    btn.textContent = y === 'all' ? '전체' : y + '년';
+    btn.onclick = () => {
+      activeYear = y;
+      document.querySelectorAll('#yearChips .chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    };
+    yc.appendChild(btn);
+  });
 }
 
-function createChip(label, type, value, active = false) {
-  const btn = document.createElement('button');
-  btn.className = 'chip' + (active ? ' active' : '');
-  btn.textContent = label;
-  btn.onclick = () => {
-    document.querySelectorAll(`.chip[onclick*="${type}"]`).forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if(type === 'year') activeYear = value;
-    if(type === 'cat') activeCat = value;
-    render();
-  };
-  return btn;
-}
-
-// 검색 이벤트
-document.getElementById('searchInput').oninput = (e) => {
-  searchQ = e.target.value.toLowerCase();
-  render();
-};
-
-// 렌더링 함수
 function render() {
   const container = document.getElementById('cardContainer');
   const items = _data.filter(d => {
-    const yOk = activeYear === 'all' || d.date.startsWith(activeYear);
-    const cOk = activeCat === 'all' || d.category.includes(activeCat);
-    const sOk = !searchQ || d.title.toLowerCase().includes(searchQ) || d.keyword.toLowerCase().includes(searchQ);
-    return yOk && cOk && sOk;
+    const yOk = activeYear === 'all' || (d.date && d.date.startsWith(activeYear));
+    const sOk = !searchQ || (d.title && d.title.toLowerCase().includes(searchQ));
+    return yOk && sOk;
   });
 
   document.getElementById('resultCount').textContent = items.length + '개';
-  document.getElementById('statTotal').textContent = _data.length;
+  
+  if (items.length === 0) {
+    container.innerHTML = '<div style="padding:50px; text-align:center; color:#999;">검색 결과가 없어요.</div>';
+    return;
+  }
 
   container.innerHTML = items.map(item => `
-    <div class="list-row" onclick="window.open('${item.url}', '_blank')">
-      <div class="col-vol">${item.vol}</div>
-      <div class="col-date">${item.date.replace(/-/g, '.')}</div>
-      <div style="font-size:20px; text-align:center">${getIcon(item.category)}</div>
+    <div class="list-row" onclick="window.open('${item.url || '#'}', '_blank')">
+      <div class="col-vol">${item.vol || '-'}</div>
+      <div class="col-date">${(item.date || '').split(' ')[0].replace(/-/g, '.')}</div>
+      <div style="text-align:center">${getIcon(item.category)}</div>
       <div class="col-title">
-        <div class="row-title">${item.title}</div>
-        <div class="row-kw"># ${item.keyword}</div>
+        <div class="row-title">${item.title || '제목 없음'}</div>
+        <div style="font-size:11px; color:#A8A29E;"># ${item.keyword || ''}</div>
       </div>
-      <div class="h-curr" style="font-size:11px; color:#78716C">
-        ${item.subject ? `<b style="color:#1C1917">[${item.subject}]</b> ` : ''}${item.unit}
+      <div class="col-curr" style="font-size:11px; color:#78716C">
+        ${item.subject ? `<b>[${item.subject}]</b> ` : ''}${item.unit || ''}
       </div>
-      <div class="col-cat">
-        <span class="cat-tag cat-${item.category.split(',')[0]}">${item.category.split(',')[0]}</span>
+      <div style="text-align:right">
+        <span class="cat-tag">${(item.category || '기타').split(',')[0]}</span>
       </div>
     </div>
   `).join('');
 }
 
 function getIcon(cat) {
-  const icons = {'과학':'🔬','사회':'🏙️','경제':'💰','환경':'🌿','세계':'🌏','역사':'📜','문화':'🎭','정치':'🏛️','건강':'❤️'};
-  return icons[cat.split(',')[0]] || '📰';
+  const icons = {'과학':'🔬','사회':'🏙️','경제':'💰','환경':'🌿','세계':'🌏','역사':'📜','문화':'🎭'};
+  return icons[(cat || '').split(',')[0]] || '📰';
 }
 
-// 구글 시트 로드
 async function loadData() {
+  const status = document.getElementById('statusMsg');
+  const table = document.getElementById('listTable');
+  
   try {
-    const res = await fetch(SHEET_CSV_URL);
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('시트 접근 실패');
     const text = await res.text();
     const rows = text.split('\n').slice(1);
+    
     _data = rows.map(row => {
       const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
       return {
-        vol: cols[0]?.replace(/"/g,''),
-        title: cols[1]?.replace(/"/g,''),
-        category: cols[2]?.replace(/"/g,''),
-        keyword: cols[3]?.replace(/"/g,''),
-        date: cols[4]?.replace(/"/g,''),
-        url: cols[5]?.replace(/"/g,''),
-        subject: cols[6]?.replace(/"/g,''),
-        unit: cols[8]?.replace(/"/g,'')
+        vol: cols[0]?.replace(/"/g,'').trim(),
+        title: cols[1]?.replace(/"/g,'').trim(),
+        category: cols[2]?.replace(/"/g,'').trim(),
+        keyword: cols[3]?.replace(/"/g,'').trim(),
+        date: cols[4]?.replace(/"/g,'').trim(),
+        url: cols[5]?.replace(/"/g,'').trim(),
+        subject: cols[6]?.replace(/"/g,'').trim(),
+        unit: cols[8]?.replace(/"/g,'').trim()
       };
-    }).filter(d => d.title && d.title !== 'coming soon!').sort((a,b) => b.vol - a.vol);
+    }).filter(d => d.vol && d.title && d.title !== 'coming soon!');
+
+    status.style.display = 'none';
+    table.style.display = 'block';
     render();
-  } catch(e) { console.error("데이터 로드 실패", e); }
+  } catch (e) {
+    status.innerHTML = '❌ 데이터를 불러오지 못했습니다.<br><br>구글 시트가 [웹에 게시] 상태인지 확인해 주세요.';
+    console.error(e);
+  }
 }
 
-initFilters();
+document.getElementById('searchInput').oninput = (e) => {
+  searchQ = e.target.value.toLowerCase();
+  render();
+};
+
+initYearFilters();
 loadData();
 </script>
 </body>
