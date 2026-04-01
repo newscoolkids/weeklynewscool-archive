@@ -7,7 +7,69 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>
+/* 뉴스쿨 공식 폰트 및 상단바 스타일 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
 :root {
+    --newscool-green: #56c16f; /* 쿨리 그린 */
+    --header-bg: #000000;
+}
+
+body {
+    margin: 0;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 상단바 전체 컨테이너 */
+.custom-header {
+    background-color: var(--header-bg);
+    color: #ffffff;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.custom-logo img {
+    max-height: 40px;
+}
+
+.custom-nav {
+    display: flex;
+    gap: 26px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.custom-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+.custom-nav a:hover {
+    color: var(--newscool-green);
+}
+
+/* 현재 페이지(아카이브) 표시 */
+.custom-nav a.active {
+    color: var(--newscool-green);
+    border-bottom: 2px solid var(--newscool-green);
+    padding-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .custom-header { padding: 0 20px; }
+    .custom-nav { display: none; } /* 모바일은 우선 숨김 처리 (단순화) */
+}
+  :root {
   --ink:#1C1917; --ink2:#44403C; --muted:#78716C; --faint:#A8A29E;
   --border:#E7E5E4; --bg:#FAFAF9; --surface:#FFFFFF;
   --red:#DC2626; --red-l:#FEE2E2;
@@ -198,6 +260,19 @@ mark{background:#FEF08A;border-radius:2px;padding:0 1px;}
 </head>
 <body>
 
+<header class="custom-header">
+    <a href="https://www.newscool.co" class="custom-logo">
+        <img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨 로고">
+    </a>
+
+    <ul class="custom-nav">
+        <li><a href="https://www.newscool.co/news">오늘의 뉴스</a></li>
+        <li><a href="https://www.newscool.co/economics">경제</a></li>
+        <li><a href="https://www.newscool.co/science">과학·기술</a></li>
+        <li><a href="https://newscoolkids.github.io/weeklynewscool-archive/" class="active">아카이브</a></li>
+        <li><a href="https://www.newscool.co/about">뉴스쿨 소개</a></li>
+    </ul>
+</header>
 <div class="loading-bar" id="loadingBar"></div>
 
 <div class="topbar">
