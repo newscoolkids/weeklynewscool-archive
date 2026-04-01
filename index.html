@@ -61,4 +61,232 @@ a { text-decoration: none; color: inherit; }
 
 .filter-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 0; }
 .filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 8px;}
-.filter-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scroll
+.filter-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-row-label { font-size: 11px; font-weight: 900; color: var(--faint); text-transform: uppercase; min-width: 35px; }
+.filter-group { display: flex; gap: 6px; }
+.filter-divider { width: 1px; height: 14px; background: var(--border); margin: 0 4px; }
+
+.chip {
+  height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid var(--border);
+  font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; align-items: center; transition: 0.1s;
+}
+.chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+/* --- [4. 히어로 & 리스트] --- */
+.hero { background: var(--ink); color: #fff; padding: 40px 20px; }
+.hero-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; }
+.hero-title { font-family: var(--serif); font-size: 28px; line-height: 1.2; }
+.hero-title em { font-style: normal; color: var(--newscool-orange); }
+.hero-sub { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
+.hero-stats { display: flex; gap: 24px; text-align: right; }
+.stat-n { font-family: var(--serif); font-size: 32px; font-weight: 900; }
+.stat-l { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+.main { max-width: 1100px; margin: 0 auto; padding: 20px 20px 80px; }
+.list-header {
+  display: grid; grid-template-columns: 52px 84px 44px 1fr 160px 72px;
+  height: 32px; align-items: center; border-bottom: 2px solid var(--ink);
+  font-size: 10px; font-weight: 700; color: var(--faint); text-transform: uppercase;
+}
+.list-row {
+  display: grid; grid-template-columns: 52px 84px 44px 1fr 160px 72px;
+  min-height: 54px; align-items: center; border-bottom: 1px solid var(--border);
+  transition: background 0.1s; cursor: pointer;
+}
+.list-row:hover { background: #f5f4f2; }
+.col-vol { font-size: 11px; font-weight: 600; color: var(--faint); padding-left: 4px; }
+.col-date { font-size: 11px; color: var(--faint); }
+.col-title { padding: 10px 0; display: flex; flex-direction: column; gap: 2px; }
+.row-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.row-kw { font-size: 11px; color: var(--faint); }
+.col-cat { display: flex; justify-content: flex-end; }
+.cat-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+
+/* 카테고리 색상 */
+.cat-과학 { background: var(--blue-l); color: var(--blue); }
+.cat-사회 { background: var(--red-l); color: var(--red); }
+.cat-경제 { background: var(--yellow-l); color: #92400E; }
+.cat-환경 { background: var(--green-l); color: var(--green); }
+
+/* 모바일 대응 */
+@media (max-width: 900px) {
+  .main-nav { display: none; }
+  .list-header, .list-row { grid-template-columns: 44px 1fr 70px; }
+  .h-date, .h-curr, .col-date, .col-curr { display: none; }
+}
+
+/* FAB & Admin */
+.fab { position: fixed; bottom: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: white; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1001; }
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <a href="https://www.newscool.co" class="header-logo">
+    <img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨">
+  </a>
+  <ul class="main-nav">
+    <li><a href="https://www.newscool.co/guidetonewscool/">활용 꿀팁</a></li>
+    <li><a href="https://www.newscool.co/tag/news/">News</a></li>
+    <li><a href="https://www.newscool.co/tag/tv/">뉴스쿨TV</a></li>
+    <li><a href="https://www.newscool.co/event-prenewscool/">프리 뉴스쿨</a></li>
+    <li><a href="https://www.newscool.co/tag/bookclub/">북클럽</a></li>
+    <li><a href="#" class="active">아카이브</a></li>
+    <li><a href="https://www.newscool.co/shop/">스토어</a></li>
+    <li><a href="https://contents.premium.naver.com/dailynewscool/newscooling" target="_blank" class="nav-highlight">뉴스100</a></li>
+  </ul>
+</header>
+
+<div class="archive-toolbar">
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+      <circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="뉴스 제목, 키워드 검색..." autocomplete="off">
+  </div>
+  <div class="result-count" id="resultCount">0개</div>
+</div>
+
+<div class="filter-strip">
+  <div class="filter-rows">
+    <div class="filter-row">
+      <span class="filter-row-label">연도</span>
+      <div class="filter-group" id="yearChips"></div>
+      <div class="filter-divider"></div>
+      <span class="filter-row-label">분야</span>
+      <div class="filter-group" id="catChips"></div>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1 class="hero-title">매주 골라온<br><em>세상의 이야기</em></h1>
+      <p class="hero-sub">초등학생 눈높이 시사 뉴스 · 창간호부터 현재까지</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n" id="statTotal">0</div><div class="stat-l">전체 호수</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="list-header">
+    <span>No.</span><span class="h-date">발행일</span><span></span><span>제목 · 키워드</span><span class="h-curr">교과 연계</span><span style="text-align:right">분야</span>
+  </div>
+  <div id="cardContainer"></div>
+</div>
+
+<button class="fab" onclick="window.open('https://docs.google.com/spreadsheets/d/1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/edit', '_blank')">＋</button>
+
+<script>
+/* --- [데이터 & 로직] --- */
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/pub?output=csv&gid=0';
+
+let _data = [];
+let activeYear = 'all', activeCat = 'all', searchQ = '';
+
+const CATS = ['사회','과학','경제','환경','세계','역사','문화','정치','건강'];
+const YEARS = ['2026', '2025', '2024', '2023', '2022'];
+
+// 필터 버튼 생성
+function initFilters() {
+  const yc = document.getElementById('yearChips');
+  const cc = document.getElementById('catChips');
+  
+  yc.innerHTML = cc.innerHTML = '';
+  
+  yc.appendChild(createChip('전체', 'year', 'all', true));
+  YEARS.forEach(y => yc.appendChild(createChip(y+'년', 'year', y)));
+  
+  cc.appendChild(createChip('전체', 'cat', 'all', true));
+  CATS.forEach(c => cc.appendChild(createChip(c, 'cat', c)));
+}
+
+function createChip(label, type, value, active = false) {
+  const btn = document.createElement('button');
+  btn.className = 'chip' + (active ? ' active' : '');
+  btn.textContent = label;
+  btn.onclick = () => {
+    document.querySelectorAll(`.chip[onclick*="${type}"]`).forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(type === 'year') activeYear = value;
+    if(type === 'cat') activeCat = value;
+    render();
+  };
+  return btn;
+}
+
+// 검색 이벤트
+document.getElementById('searchInput').oninput = (e) => {
+  searchQ = e.target.value.toLowerCase();
+  render();
+};
+
+// 렌더링 함수
+function render() {
+  const container = document.getElementById('cardContainer');
+  const items = _data.filter(d => {
+    const yOk = activeYear === 'all' || d.date.startsWith(activeYear);
+    const cOk = activeCat === 'all' || d.category.includes(activeCat);
+    const sOk = !searchQ || d.title.toLowerCase().includes(searchQ) || d.keyword.toLowerCase().includes(searchQ);
+    return yOk && cOk && sOk;
+  });
+
+  document.getElementById('resultCount').textContent = items.length + '개';
+  document.getElementById('statTotal').textContent = _data.length;
+
+  container.innerHTML = items.map(item => `
+    <div class="list-row" onclick="window.open('${item.url}', '_blank')">
+      <div class="col-vol">${item.vol}</div>
+      <div class="col-date">${item.date.replace(/-/g, '.')}</div>
+      <div style="font-size:20px; text-align:center">${getIcon(item.category)}</div>
+      <div class="col-title">
+        <div class="row-title">${item.title}</div>
+        <div class="row-kw"># ${item.keyword}</div>
+      </div>
+      <div class="h-curr" style="font-size:11px; color:#78716C">
+        ${item.subject ? `<b style="color:#1C1917">[${item.subject}]</b> ` : ''}${item.unit}
+      </div>
+      <div class="col-cat">
+        <span class="cat-tag cat-${item.category.split(',')[0]}">${item.category.split(',')[0]}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getIcon(cat) {
+  const icons = {'과학':'🔬','사회':'🏙️','경제':'💰','환경':'🌿','세계':'🌏','역사':'📜','문화':'🎭','정치':'🏛️','건강':'❤️'};
+  return icons[cat.split(',')[0]] || '📰';
+}
+
+// 구글 시트 로드
+async function loadData() {
+  try {
+    const res = await fetch(SHEET_CSV_URL);
+    const text = await res.text();
+    const rows = text.split('\n').slice(1);
+    _data = rows.map(row => {
+      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      return {
+        vol: cols[0]?.replace(/"/g,''),
+        title: cols[1]?.replace(/"/g,''),
+        category: cols[2]?.replace(/"/g,''),
+        keyword: cols[3]?.replace(/"/g,''),
+        date: cols[4]?.replace(/"/g,''),
+        url: cols[5]?.replace(/"/g,''),
+        subject: cols[6]?.replace(/"/g,''),
+        unit: cols[8]?.replace(/"/g,'')
+      };
+    }).filter(d => d.title && d.title !== 'coming soon!').sort((a,b) => b.vol - a.vol);
+    render();
+  } catch(e) { console.error("데이터 로드 실패", e); }
+}
+
+initFilters();
+loadData();
+</script>
+</body>
+</html>
