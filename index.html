@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>
-/* 1. 디자인 변수 설정 */
+/* --- [1. 디자인 변수 & 초기화] --- */
 :root {
   --newscool-green: #56c16f; /* 쿨리 그린 */
   --newscool-orange: #ffae00; /* 뉴쌤 오렌지 */
@@ -20,164 +20,45 @@
   --surface: #FFFFFF;
   --sans: 'Noto Sans KR', sans-serif;
   --serif: 'Noto Serif KR', serif;
+  --blue: #2563EB; --blue-l: #DBEAFE;
+  --red: #DC2626; --red-l: #FEE2E2;
+  --yellow: #F59E0B; --yellow-l: #FEF3C7;
+  --green: #16A34A; --green-l: #DCFCE7;
+  --teal: #0D9488; --teal-l: #CCFBF1;
+  --purple: #7C3AED; --purple-l: #EDE9FE;
 }
 
-/* 2. 기본 스타일 초기화 */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; color: inherit; }
 
-/* 3. 통합 메인 헤더 (검은색 바 하나로 통합) */
+/* --- [2. 상단 통합 헤더 (Black)] --- */
 .main-header {
-  background: #000;
-  color: #fff;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  background: #000; color: #fff; height: 80px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; position: sticky; top: 0; z-index: 1000;
 }
 .header-logo img { height: 32px; display: block; }
-
 .main-nav { display: flex; gap: 18px; list-style: none; align-items: center; }
-.main-nav a { font-size: 13px; font-weight: 700; transition: color 0.2s; white-space: nowrap; color: rgba(255,255,255,0.8); }
-.main-nav a:hover { color: var(--newscool-green); }
-.main-nav a.active { color: var(--newscool-green); }
-.nav-highlight { color: #de83fe !important; } /* 뉴스100 프로젝트 보라색 포인트 */
+.main-nav a { font-size: 13px; font-weight: 700; transition: color 0.2s; color: rgba(255,255,255,0.8); white-space: nowrap; }
+.main-nav a:hover, .main-nav a.active { color: var(--newscool-green); }
+.nav-highlight { color: #de83fe !important; }
 
-/* 4. 검색 및 아카이브 전용 툴바 (흰색 레이어) */
+/* --- [3. 아카이브 툴바 & 필터 (White)] --- */
 .archive-toolbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  position: sticky;
-  top: 80px; /* 메인 헤더 바로 아래 붙음 */
-  z-index: 999;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 20px;
+  position: sticky; top: 80px; z-index: 999;
 }
 .search-box { flex: 1; max-width: 400px; position: relative; }
 .search-box input {
   width: 100%; height: 38px; padding: 0 12px 0 38px;
   border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 14px; background: var(--bg); outline: none; transition: 0.2s;
+  font-size: 14px; background: var(--bg); outline: none;
 }
 .search-box input:focus { border-color: var(--ink); background: #fff; }
 .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--faint); }
-.result-count { font-size: 12px; color: var(--muted); min-width: 60px; }
 
-/* 5. 필터 영역 */
 .filter-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 0; }
-.filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-.filter-row { display: flex; align-items: center; gap: 8px; height: 40px; overflow-x: auto; scrollbar-width: none; }
-.filter-row::-webkit-scrollbar { display: none; }
-.filter-row-label { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; flex-shrink: 0; min-width: 35px; }
-.filter-group { display: flex; gap: 6px; }
-.filter-divider { width: 1px; height: 14px; background: var(--border); margin: 0 8px; }
-
-.chip {
-  height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid var(--border);
-  background: transparent; font-size: 12px; font-weight: 500; color: var(--muted);
-  cursor: pointer; transition: 0.15s; white-space: nowrap; display: flex; align-items: center; gap: 4px;
-}
-.chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
-
-/* 6. 히어로 섹션 */
-.hero { background: var(--ink); color: #fff; padding: 40px 20px; }
-.hero-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; }
-.hero-title { font-family: var(--serif); font-size: 32px; line-height: 1.2; }
-.hero-title em { font-style: normal; color: var(--newscool-orange); }
-.hero-sub { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-
-/* 7. 리스트 및 기타 (기존 스타일 유지) */
-.main { max-width: 1100px; margin: 0 auto; padding: 20px; }
-/* ... (리스트 로우 관련 스타일은 유지됨) ... */
-/* [기존 코드의 .list-row, .year-divider 등 스타일이 여기에 들어갑니다] */
-
-/* 기존 코드 스타일들 간소화 유지 */
-.year-divider { display: flex; align-items: center; gap: 14px; margin: 30px 0 15px; }
-.year-num { font-family: var(--serif); font-size: 16px; font-weight: 900; color: var(--muted); }
-.year-line { flex: 1; height: 1px; background: var(--border); }
-.list-row { display: grid; grid-template-columns: 50px 90px 40px 1fr 180px 80px; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; font-size: 14px; }
-.col-vol { font-weight: 700; color: var(--faint); }
-.row-title { font-weight: 700; }
-.col-cat { text-align: right; }
-.cat-tag-sm { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-
-/* 카테고리 색상 */
-.cat-과학 { background: #DBEAFE; color: #1D4ED8; }
-.cat-사회 { background: #FEE2E2; color: #DC2626; }
-.cat-경제 { background: #FEF3C7; color: #92400E; }
-
-/* 모바일 대응 */
-@media (max-width: 1024px) {
-  .main-nav { display: none; } /* 모바일에서는 링크가 너무 많아 숨김 처리 */
-  .main-header { justify-content: center; }
-  .list-row { grid-template-columns: 40px 1fr 70px; }
-  .col-date, .col-curr { display: none; }
-}
-</style>
-</head>
-<body>
-
-<header class="main-header">
-  <a href="https://www.newscool.co" class="header-logo">
-    <img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨">
-  </a>
-  <ul class="main-nav">
-    <li><a href="https://www.newscool.co/guidetonewscool/">활용 꿀팁</a></li>
-    <li><a href="https://www.newscool.co/tag/news/">News</a></li>
-    <li><a href="https://www.newscool.co/tag/tv/">뉴스쿨TV</a></li>
-    <li><a href="https://www.newscool.co/event-prenewscool/">프리 뉴스쿨</a></li>
-    <li><a href="https://www.newscool.co/tag/bookclub/">북클럽</a></li>
-    <li><a href="#" class="active">아카이브</a></li>
-    <li><a href="https://www.newscool.co/shop/">스토어</a></li>
-    <li><a href="https://contents.premium.naver.com/dailynewscool/newscooling" target="_blank" class="nav-highlight">뉴스100</a></li>
-  </ul>
-</header>
-
-<div class="archive-toolbar">
-  <div class="search-box">
-    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/>
-    </svg>
-    <input type="text" id="searchInput" placeholder="어떤 뉴스를 찾으시나요? 제목, 키워드 검색…" autocomplete="off">
-  </div>
-  <div class="result-count" id="resultCount">0개</div>
-</div>
-
-<div class="filter-strip">
-  <div class="filter-rows">
-    <div class="filter-row">
-      <span class="filter-row-label">연도</span>
-      <div class="filter-group" id="yearChips"></div>
-      <div class="filter-divider"></div>
-      <span class="filter-row-label">분야</span>
-      <div class="filter-group" id="catChips"></div>
-    </div>
-  </div>
-</div>
-
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1 class="hero-title">매주 골라온<br><em>세상의 이야기</em></h1>
-      <p class="hero-sub">초등학생 눈높이 시사 뉴스 · 2022년 창간호부터 현재까지</p>
-    </div>
-  </div>
-</div>
-
-<div class="main">
-  <div id="cardContainer"></div>
-</div>
-
-<script>
-// [기존에 있던 BASE_DATA, buildFilters, render 등의 스크립트를 그대로 붙여넣으세요]
-</script>
-</body>
-</html>
+.filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 8px;}
+.filter-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scroll
