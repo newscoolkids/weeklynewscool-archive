@@ -7,63 +7,87 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
 <style>
-/* --- 디자인 변수 --- */
+/* --- 1. 뉴스쿨 브랜드 디자인 --- */
 :root {
   --newscool-green: #56c16f; --newscool-orange: #ffae00;
   --ink: #1C1917; --muted: #78716C; --faint: #A8A29E;
   --border: #E7E5E4; --bg: #FAFAF9; --surface: #FFFFFF;
   --sans: 'Noto Sans KR', sans-serif; --serif: 'Noto Serif KR', serif;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
-a { text-decoration: none; color: inherit; }
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-/* --- 상단 블랙 헤더 --- */
+/* --- 2. 상단 헤더 (블랙 바 하나로 통합) --- */
 .main-header {
   background: #000; color: #fff; height: 80px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 40px; position: sticky; top: 0; z-index: 1000;
 }
 .header-logo img { height: 32px; display: block; }
-.main-nav { display: flex; gap: 18px; list-style: none; }
-.main-nav a { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); white-space: nowrap; }
+.main-nav { display: flex; gap: 15px; list-style: none; align-items: center; }
+.main-nav a { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7); white-space: nowrap; transition: 0.2s; }
 .main-nav a:hover, .main-nav a.active { color: var(--newscool-green); }
+.nav-highlight { color: #de83fe !important; }
 
-/* --- 검색 및 필터 바 --- */
-.archive-toolbar {
+/* --- 3. 검색 및 필터 (화이트 바) --- */
+.archive-bar {
   background: var(--surface); border-bottom: 1px solid var(--border);
   padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 20px;
   position: sticky; top: 80px; z-index: 999;
 }
-.search-box { flex: 1; max-width: 400px; position: relative; }
-.search-box input { width: 100%; height: 38px; padding: 0 12px 0 38px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; color: var(--faint); }
+.search-box { flex: 1; max-width: 450px; position: relative; }
+.search-box input {
+  width: 100%; height: 42px; padding: 0 15px 0 42px;
+  border: 2px solid var(--border); border-radius: 10px;
+  font-size: 14px; outline: none; transition: 0.2s;
+}
+.search-box input:focus { border-color: var(--ink); }
+.search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; color: var(--faint); }
 
 .filter-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 0; }
-.filter-rows { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-.filter-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-.filter-row-label { font-size: 11px; font-weight: 900; color: var(--faint); min-width: 35px; }
-.filter-group { display: flex; gap: 6px; }
-.chip { height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; align-items: center; }
+.filter-row { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+.filter-label { font-size: 11px; font-weight: 900; color: var(--faint); min-width: 40px; }
+.chip { height: 30px; padding: 0 14px; border-radius: 15px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; background: transparent; transition: 0.1s; color: var(--muted); }
 .chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
 
-/* --- 리스트 --- */
-.main { max-width: 1100px; margin: 0 auto; padding: 20px; }
-.list-header { display: grid; grid-template-columns: 50px 90px 40px 1fr 180px 80px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); font-size: 11px; color: var(--faint); font-weight: 700; }
-.list-row { display: grid; grid-template-columns: 50px 90px 40px 1fr 180px 80px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; }
-.list-row:hover { background: #f5f4f2; }
-.row-title { font-weight: 700; font-size: 14px; }
-.cat-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #eee; }
+/* --- 4. 메인 아카이브 리스트 --- */
+.main-content { max-width: 1100px; margin: 0 auto; padding: 30px 20px 100px; }
+.list-header {
+  display: grid; grid-template-columns: 50px 100px 40px 1fr 180px 80px;
+  padding-bottom: 12px; border-bottom: 2px solid var(--ink);
+  font-size: 11px; color: var(--faint); font-weight: 700; text-transform: uppercase;
+}
+.list-item {
+  display: grid; grid-template-columns: 50px 100px 40px 1fr 180px 80px;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+  align-items: center; cursor: pointer; text-decoration: none; color: inherit;
+}
+.list-item:hover { background: #f8f7f5; }
+.col-vol { font-weight: 600; color: var(--faint); font-size: 12px; }
+.col-date { font-size: 12px; color: var(--faint); }
+.col-title { display: flex; flex-direction: column; gap: 4px; padding-right: 15px; }
+.item-title { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+.item-kw { font-size: 11px; color: var(--faint); }
+.col-cat { text-align: right; }
+.cat-badge { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; background: #eee; }
 
-/* 상태 표시 */
-#statusMsg { text-align: center; padding: 100px 20px; font-weight: 500; color: var(--muted); }
+/* 교과 연계 컬러 */
+.tag-subject { font-size: 11px; color: var(--muted); font-weight: 500; }
+.tag-subject b { color: var(--ink); }
 
+/* 모바일 화면 */
 @media (max-width: 900px) {
   .main-nav { display: none; }
-  .list-header, .list-row { grid-template-columns: 40px 1fr 70px; }
-  .col-date, .col-curr, .h-date, .h-curr { display: none; }
+  .list-header, .list-item { grid-template-columns: 40px 1fr 70px; }
+  .h-date, .h-curr, .col-date, .col-curr { display: none; }
+  .main-header { padding: 0 20px; }
 }
+
+/* 상태 안내 */
+.status-area { text-align: center; padding: 80px 20px; }
+.status-area p { color: var(--muted); margin-top: 10px; }
+.loading-spinner { width: 30px; height: 30px; border: 3px solid #eee; border-top-color: var(--newscool-green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -71,134 +95,157 @@ a { text-decoration: none; color: inherit; }
 <header class="main-header">
   <a href="https://www.newscool.co" class="header-logo"><img src="https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.newscool/2023/01/oewru5_로고.png" alt="뉴스쿨"></a>
   <ul class="main-nav">
-    <li><a href="https://www.newscool.co/guidetonewscool/">활용 꿀팁</a></li>
+    <li><a href="https://www.newscool.co/guidetonewscool/">꿀팁</a></li>
     <li><a href="https://www.newscool.co/tag/news/">News</a></li>
     <li><a href="https://www.newscool.co/tag/tv/">뉴스쿨TV</a></li>
+    <li><a href="https://www.newscool.co/event-prenewscool/">프리 뉴스쿨</a></li>
+    <li><a href="https://www.newscool.co/tag/bookclub/">북클럽</a></li>
     <li><a href="#" class="active">아카이브</a></li>
     <li><a href="https://www.newscool.co/shop/">스토어</a></li>
+    <li><a href="https://contents.premium.naver.com/dailynewscool/newscooling" target="_blank" class="nav-highlight">뉴스100</a></li>
   </ul>
 </header>
 
-<div class="archive-toolbar">
+<div class="archive-bar">
   <div class="search-box">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.5-4.5"/></svg>
-    <input type="text" id="searchInput" placeholder="뉴스 제목 검색..." autocomplete="off">
+    <input type="text" id="searchInput" placeholder="뉴스를 검색해 보세요 (제목, 키워드, 교과 등)" autocomplete="off">
   </div>
-  <div id="resultCount" style="font-size:12px; color:var(--muted);">0개</div>
+  <div id="resultCount" style="font-size:13px; font-weight:700; color:var(--muted);">0개</div>
 </div>
 
 <div class="filter-strip">
-  <div class="filter-rows">
-    <div class="filter-row">
-      <span class="filter-row-label">연도</span>
-      <div class="filter-group" id="yearChips"></div>
-    </div>
+  <div class="filter-row">
+    <span class="filter-label">연도</span>
+    <div id="yearChips" class="filter-group"></div>
   </div>
 </div>
 
-<div class="main">
-  <div id="statusMsg">데이터를 불러오는 중입니다...</div>
-  <div id="listTable" style="display:none;">
+<div class="main-content">
+  <div id="statusMsg" class="status-area">
+    <div class="loading-spinner"></div>
+    <p>쿨리가 데이터를 가져오고 있어요!</p>
+  </div>
+  
+  <div id="archiveTable" style="display:none;">
     <div class="list-header">
-      <span>No.</span><span class="h-date">발행일</span><span></span><span>제목</span><span class="h-curr">교과</span><span style="text-align:right">분야</span>
+      <span>No.</span><span class="h-date">발행일</span><span></span><span>제목 · 키워드</span><span class="h-curr">교과 연계</span><span style="text-align:right">분야</span>
     </div>
-    <div id="cardContainer"></div>
+    <div id="listContainer"></div>
   </div>
 </div>
 
 <script>
+// 구글 시트 웹 게시 CSV 주소
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzdSzgrUGAed3WCyukDYSkkwSRedXkvwaeVquAlCHx2iqoZLhU8CDvOJ7vhYBOnIZ6naIqju_DSBLO/pub?output=csv&gid=0';
 
-let _data = [];
+let _rawData = [];
 let activeYear = 'all', searchQ = '';
 
-function initYearFilters() {
-  const yc = document.getElementById('yearChips');
-  yc.innerHTML = '';
-  const years = ['all', '2026', '2025', '2024', '2023', '2022'];
-  years.forEach(y => {
-    const btn = document.createElement('button');
-    btn.className = 'chip' + (y === activeYear ? ' active' : '');
-    btn.textContent = y === 'all' ? '전체' : y + '년';
-    btn.onclick = () => {
-      activeYear = y;
-      document.querySelectorAll('#yearChips .chip').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      render();
-    };
-    yc.appendChild(btn);
-  });
+// CSV 파싱 함수 (따옴표와 쉼표 처리 강화)
+function parseCSV(text) {
+  const result = [];
+  const lines = text.split(/\r?\n/);
+  for (let i = 1; i < lines.length; i++) {
+    const row = [];
+    let cur = '', inQuotes = false;
+    for (let char of lines[i]) {
+      if (char === '"') inQuotes = !inQuotes;
+      else if (char === ',' && !inQuotes) { row.push(cur); cur = ''; }
+      else cur += char;
+    }
+    row.push(cur);
+    if (row[1]) result.push(row);
+  }
+  return result;
 }
 
+// 아이콘 매칭
+function getIcon(cat) {
+  const icons = {'과학':'🔬','사회':'🏙️','경제':'💰','환경':'🌿','세계':'🌏','역사':'📜','문화':'🎭','정치':'🏛️','건강':'❤️'};
+  return icons[(cat || '').split(',')[0].trim()] || '📰';
+}
+
+// 렌더링
 function render() {
-  const container = document.getElementById('cardContainer');
-  const items = _data.filter(d => {
+  const container = document.getElementById('listContainer');
+  const filtered = _rawData.filter(d => {
     const yOk = activeYear === 'all' || (d.date && d.date.startsWith(activeYear));
-    const sOk = !searchQ || (d.title && d.title.toLowerCase().includes(searchQ));
+    const sOk = !searchQ || 
+                (d.title && d.title.toLowerCase().includes(searchQ)) || 
+                (d.keyword && d.keyword.toLowerCase().includes(searchQ)) ||
+                (d.subject && d.subject.toLowerCase().includes(searchQ));
     return yOk && sOk;
   });
 
-  document.getElementById('resultCount').textContent = items.length + '개';
-  
-  if (items.length === 0) {
-    container.innerHTML = '<div style="padding:50px; text-align:center; color:#999;">검색 결과가 없어요.</div>';
+  document.getElementById('resultCount').textContent = filtered.length + '개';
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding:100px; color:#999;">뉴스를 찾지 못했어요. 검색어를 바꿔보세요!</div>';
     return;
   }
 
-  container.innerHTML = items.map(item => `
-    <div class="list-row" onclick="window.open('${item.url || '#'}', '_blank')">
-      <div class="col-vol">${item.vol || '-'}</div>
-      <div class="col-date">${(item.date || '').split(' ')[0].replace(/-/g, '.')}</div>
-      <div style="text-align:center">${getIcon(item.category)}</div>
+  container.innerHTML = filtered.map(d => `
+    <a href="${d.url || '#'}" target="_blank" class="list-item">
+      <div class="col-vol">${d.vol}</div>
+      <div class="col-date">${(d.date || '').replace(/-/g, '.')}</div>
+      <div style="font-size:20px; text-align:center;">${getIcon(d.category)}</div>
       <div class="col-title">
-        <div class="row-title">${item.title || '제목 없음'}</div>
-        <div style="font-size:11px; color:#A8A29E;"># ${item.keyword || ''}</div>
+        <div class="item-title">${d.title}</div>
+        <div class="item-kw"># ${(d.keyword || '').replace(/,/g, ', ')}</div>
       </div>
-      <div class="col-curr" style="font-size:11px; color:#78716C">
-        ${item.subject ? `<b>[${item.subject}]</b> ` : ''}${item.unit || ''}
+      <div class="col-curr">
+        <div class="tag-subject">${d.subject ? `<b>[${d.subject}]</b> ` : ''}${d.unit || ''}</div>
       </div>
-      <div style="text-align:right">
-        <span class="cat-tag">${(item.category || '기타').split(',')[0]}</span>
+      <div class="col-cat">
+        <span class="cat-badge">${(d.category || '기타').split(',')[0]}</span>
       </div>
-    </div>
+    </a>
   `).join('');
 }
 
-function getIcon(cat) {
-  const icons = {'과학':'🔬','사회':'🏙️','경제':'💰','환경':'🌿','세계':'🌏','역사':'📜','문화':'🎭'};
-  return icons[(cat || '').split(',')[0]] || '📰';
+// 필터 초기화
+function initFilters() {
+  const yc = document.getElementById('yearChips');
+  const years = ['all', '2026', '2025', '2024', '2023', '2022'];
+  yc.innerHTML = years.map(y => `
+    <button class="chip ${y === activeYear ? 'active' : ''}" onclick="setYear('${y}', this)">
+      ${y === 'all' ? '전체' : y + '년'}
+    </button>
+  `).join('');
 }
 
+window.setYear = (year, btn) => {
+  activeYear = year;
+  document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+};
+
+// 데이터 로드
 async function loadData() {
-  const status = document.getElementById('statusMsg');
-  const table = document.getElementById('listTable');
-  
   try {
     const res = await fetch(CSV_URL);
-    if (!res.ok) throw new Error('시트 접근 실패');
     const text = await res.text();
-    const rows = text.split('\n').slice(1);
-    
-    _data = rows.map(row => {
-      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-      return {
-        vol: cols[0]?.replace(/"/g,'').trim(),
-        title: cols[1]?.replace(/"/g,'').trim(),
-        category: cols[2]?.replace(/"/g,'').trim(),
-        keyword: cols[3]?.replace(/"/g,'').trim(),
-        date: cols[4]?.replace(/"/g,'').trim(),
-        url: cols[5]?.replace(/"/g,'').trim(),
-        subject: cols[6]?.replace(/"/g,'').trim(),
-        unit: cols[8]?.replace(/"/g,'').trim()
-      };
-    }).filter(d => d.vol && d.title && d.title !== 'coming soon!');
+    const rows = parseCSV(text);
 
-    status.style.display = 'none';
-    table.style.display = 'block';
+    _rawData = rows.map(r => ({
+      vol: r[0]?.replace(/"/g,''),
+      title: r[1]?.replace(/"/g,''),
+      category: r[2]?.replace(/"/g,''),
+      keyword: r[3]?.replace(/"/g,''),
+      date: r[4]?.replace(/"/g,''),
+      url: r[5]?.replace(/"/g,''),
+      subject: r[6]?.replace(/"/g,''),
+      unit: r[8]?.replace(/"/g,'')
+    })).filter(d => d.title && d.title !== 'coming soon!')
+       .sort((a,b) => b.vol - a.vol);
+
+    document.getElementById('statusMsg').style.display = 'none';
+    document.getElementById('archiveTable').style.display = 'block';
     render();
   } catch (e) {
-    status.innerHTML = '❌ 데이터를 불러오지 못했습니다.<br><br>구글 시트가 [웹에 게시] 상태인지 확인해 주세요.';
-    console.error(e);
+    document.getElementById('statusMsg').innerHTML = '❌ 데이터를 불러오지 못했어요. <br> 시트의 [웹에 게시] 설정을 확인해 주세요.';
   }
 }
 
@@ -207,7 +254,7 @@ document.getElementById('searchInput').oninput = (e) => {
   render();
 };
 
-initYearFilters();
+initFilters();
 loadData();
 </script>
 </body>
